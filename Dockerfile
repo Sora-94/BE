@@ -1,24 +1,31 @@
-# Use the official ASP.NET Core runtime as a parent image
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
+#For more information, please see https://aka.ms/containercompat
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
+EXPOSE 8081
 
-# Use the official build image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WebAPI.Server.csproj", "./"]
-RUN dotnet restore "WebAPI.Server.csproj"
+COPY ["Presentation/Presentation.csproj", "Presentation/"]
+COPY ["Application/Application.csproj", "Application/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["DataAccess/Repositories.csproj", "DataAccess/"]
+COPY ["Persistence/Persistence.csproj", "Persistence/"]
+RUN dotnet restore "./Presentation/Presentation.csproj"
 COPY . .
-WORKDIR "/src/"
-RUN dotnet build "WebAPI.Server.csproj" -c Release -o /app/build
+WORKDIR "/src/Presentation"
+RUN dotnet build "./Presentation.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
-# Use the build image to publish the app
 FROM build AS publish
-RUN dotnet publish "WebAPI.Server.csproj" -c Release -o /app/publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Presentation.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
 
-# Use the runtime image to run the app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebAPI.Server.dll"]
+ENTRYPOINT ["dotnet", "Presentation.dll"]

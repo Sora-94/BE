@@ -2,7 +2,7 @@
 
 namespace Application.Services.Models.ProductModels
 {
-    public class ProductForView: ProductBaseDto
+    public class ProductForView : ProductBaseDto
     {
         public Guid Id { get; set; }
         public string CategoryName { get; set; }

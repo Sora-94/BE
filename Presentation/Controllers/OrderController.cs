@@ -68,7 +68,7 @@ namespace Presentation.Controllers
             }
             return BadRequest(response);
         }
-       
+
         [HttpPut("{id}")]
         [Authorize("admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateOrderCommand orderDto)
