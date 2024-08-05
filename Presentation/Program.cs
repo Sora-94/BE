@@ -112,10 +112,4 @@ app.UseAuthorization();//8
 app.MapControllers();//last
 
 // Gọi phương thức SeedData.Initialize
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    SeedData.Initialize(services);
-}
-
 app.Run();

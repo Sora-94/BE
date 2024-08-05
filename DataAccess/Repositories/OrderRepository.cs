@@ -55,10 +55,10 @@ namespace Repositories.Repositories
                 .Include(u => u.OrderItems).ThenInclude(u => u.Combo)
                 .AsNoTracking().AsQueryable();
 
-            if (!string.IsNullOrEmpty(model.SearchTerm))    
+            if (!string.IsNullOrEmpty(model.SearchTerm))
             {
                 orderQuery = orderQuery.Where(p =>
-                    p.User.FirstName.ToLower().Contains(model.SearchTerm.ToLower())||
+                    p.User.FirstName.ToLower().Contains(model.SearchTerm.ToLower()) ||
                     p.User.LastName.ToLower().Contains(model.SearchTerm.ToLower()) ||
                     p.Status.ToString().Contains(model.SearchTerm.ToLower()));
             }
