@@ -53,9 +53,23 @@ namespace Application.Commands.ProductCommands
                 {
                     return ResponseHelper.ErrorResponse(ErrorCode.NotFound, "thể loại");
                 }
+
+                _logger.LogInformation("Mapping productDto to product.");
                 Product product = _mapper.Map<Product>(productDto);
                 product.DateAdded = DateTimeOffset.UtcNow;
 
+                if (_unitOfWork.Product == null)
+                {
+                    _logger.LogError("_unitOfWork.Product is null.");
+                    throw new NullReferenceException("_unitOfWork.Product");
+                }
+                if (product == null)
+                {
+                    _logger.LogError("Product is null after mapping.");
+                    throw new NullReferenceException("Product");
+                }
+
+                _logger.LogInformation("Creating product in database.");
                 await _unitOfWork.Product.CreateProductAsync(product);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -63,9 +77,9 @@ namespace Application.Commands.ProductCommands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                throw new NullReferenceException(nameof(Handle));
+                _logger.LogError(ex, "Error occurred while creating product.");
+                throw;
             }
         }
     }
-}
+    }

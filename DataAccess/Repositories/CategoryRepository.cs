@@ -35,12 +35,9 @@ namespace Repositories.Repositories
 
             return product == null;
         }
-
         public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
-            return await _context.Categories
-                .Include(p => p.Products)
-                .SingleOrDefaultAsync(p => p.Id == id && !p.IsDeleted.HasValue || !p.IsDeleted.Value);
+            return await _context.Categories.SingleOrDefaultAsync(c => c.Id == id) ;
         }
         public async Task<IEnumerable<Category>> GetAllCategories()
         {
