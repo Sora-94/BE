@@ -21,8 +21,8 @@ namespace Application.Services.Models.ProductModels
                 .GreaterThanOrEqualTo(1).WithMessage("Không  được bé hơn 1");
             //.MustAsync(productRepo.IsUniqueProductName).WithMessage(x => $"Tên sản phẩm '{x.Name}' đã tồn tại");
             RuleFor(x => x.Discount)
-                .GreaterThanOrEqualTo(0).WithMessage($"Không được bé 0")
-                .GreaterThan(0).WithMessage($"Phải lớn hơn 0");
+                .GreaterThanOrEqualTo(0).WithMessage($"Không được bé 0");
+                //.GreaterThan(0).WithMessage($"Phải lớn hơn 0");
         }
     }
 }

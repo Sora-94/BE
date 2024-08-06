@@ -41,7 +41,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             var order = new GetOrderByIdQuery(id);
@@ -70,7 +70,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize("admin")]
+        //[Authorize("admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateOrderCommand orderDto)
         {
             orderDto.Id = id;
